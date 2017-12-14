@@ -1,0 +1,16 @@
+{
+    "manifest_version": 2,
+  
+    "name": "GitHub Code Review File Minimizer",
+    "description": "Automatically minimizes code file content for those files you don't normally care about",
+    "version": "1.0",
+  
+    "browser_action": {
+      "default_icon": "icon.png",
+      "default_popup": "popup.html"
+    },
+    "permissions": [
+      "activeTab",
+      "storage"
+    ]
+  }
