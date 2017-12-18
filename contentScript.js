@@ -1,7 +1,7 @@
 var targetNodes = $(".repository-content");
 var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 var myObserver = new MutationObserver(mutationHandler);
-var obsConfig = { childList: true, characterData: true, attributes: true, subtree: true };
+var obsConfig = { childList: true,  subtree: true };
 var inMutation = false;
 
 
@@ -17,8 +17,10 @@ function mutationHandler(mutationRecords) {
     inMutation = true;
 
     mutationRecords.forEach(function (mutation) {
+        
         if (mutation.type == "childList") {
             if (typeof mutation.addedNodes == "object") {
+                debugger;
                 //console.log(JSON.stringify(mutation.addedNodes));
 
                 console.log(mutation.addedNodes);
