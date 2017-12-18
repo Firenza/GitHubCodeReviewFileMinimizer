@@ -19,14 +19,18 @@ function mutationHandler(mutationRecords) {
     mutationRecords.forEach(function (mutation) {
         if (mutation.type == "childList") {
             if (typeof mutation.addedNodes == "object") {
-                console.log(JSON.stringify(mutation.addedNodes));
+                //console.log(JSON.stringify(mutation.addedNodes));
 
                 console.log(mutation.addedNodes);
-                console.log("SOME " + _.some(mutation.addedNodes, '#text'));
+               // console.log("SOME " + _.some(mutation.addedNodes, '#text'));
 
                 mutation.addedNodes.forEach(element => {
-
+                    console.log(Object.keys(element).length)
+                    console.log(Object.getOwnPropertyNames(element));
                     console.log(typeof element);
+                    console.log(element.toString());
+                    console.log(element.id);
+                    console.log(Object.values(element));
                     console.log(JSON.stringify(element));
                 });
 
