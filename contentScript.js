@@ -37,3 +37,6 @@ function collapseDiffs() {
         }
     });
 }
+
+// Run this right away for the file diffs that were loaded with the page
+collapseDiffs();
