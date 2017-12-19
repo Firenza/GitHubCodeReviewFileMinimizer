@@ -21,33 +21,40 @@ function mutationHandler(mutationRecords) {
     });
 }
 
-let key = "fileDiffToCollapseRegex";
 let fileDifToCollapseRegex = undefined;
-
-chrome.storage.sync.get(key, (items) => {
-    let fileDifToCollapseRegexString = items[key];
-
-    if (fileDifToCollapseRegexString !== undefined){
-        fileDifToCollapseRegex = RegExp(fileDifToCollapseRegexString);
-    }
-});
 
 function collapseDiffs() {
     $('div .file-header').each(function (index) {
         let fileName = $(this).find('div.file-info').find('a').attr('title');
 
-        if (fileDifToCollapseRegex !== undefined && fileDifToCollapseRegex.test(fileName)) {
-
+        
+       if (fileDifToCollapseRegex !== undefined && fileDifToCollapseRegex.test(fileName)) {
             // Check to see if this diff has already been collapsed
             let $button = $(this).find('button');
             let isButtonInExpandedMode = $button.attr('aria-expanded');
 
             if (isButtonInExpandedMode) {
-                $button.click();
+                
+                // Directly doing the css updates that the button click does works more reliably that mimicing
+                // a button click so do that
+                $(this).parent().attr('class', 'file js-file js-details-container Details show-inline-notes js-transitionable open Details--on');
+                $button.attr('aria-expanded', 'false');
             }
         }
     });
 }
 
-// Run this right away for the file diffs that were loaded with the page
-collapseDiffs();
+let key = "fileDiffToCollapseRegex";
+
+chrome.storage.sync.get(key, (items) => {
+    let fileDifToCollapseRegexString = items[key];
+
+    if (fileDifToCollapseRegexString !== undefined) {
+        fileDifToCollapseRegex = RegExp(fileDifToCollapseRegexString);
+    }
+
+    //For whatever reason the collapsing won't work unless there is a slight delay
+    setTimeout(() => {
+        collapseDiffs();
+    }, 200);
+});
