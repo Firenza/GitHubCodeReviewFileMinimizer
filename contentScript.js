@@ -33,6 +33,8 @@
                     // There is only one delayed request to get more diff data so we only need
                     // to watch for one mutation
                     observer.disconnect();
+
+                    logDev("Done collapsing diffs after Mutation trigger");
                 }
             });
         }
@@ -78,6 +80,11 @@
             }
 
             collapseDiffs();
+
+            logDev('Done collapsing diffs, exiting content script');
         });
+    }
+    else{
+        logDev('File container not found, existing content script')
     }
 })();
