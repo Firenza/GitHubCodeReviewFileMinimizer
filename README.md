@@ -12,5 +12,9 @@ A user defined regex value is used to pick which file diffs to collapse
 
 1. [Click here](https://chrome.google.com/webstore/detail/github-pull-request-enhan/fbcijinnjokkhnmeilacncmiafcgplph) to install the extension from the Chrome Store
 1. Click the  ![](https://github.com/Firenza/GitHubPullRequestEnhancer/blob/master/PR_16x16.png) button in Chrome
-2. Enter a regex pattern for the files diffs you want to automatically collapse.  For .NET repos you can use the following regex pattern to start `\.csproj|\.vbproj|\.sln|packages\.config`
+2. Enter a regex pattern for the files diffs you want to automatically collapse.
+   - For .NET repos you can use the following regex pattern to start:
+      ```regex
+      \.csproj|\.vbproj|\.sqlproj|\.sln|packages\.config
+      ```
 3. Naivgate to a Pull Request enjoy how much easier dealing with it is :)
