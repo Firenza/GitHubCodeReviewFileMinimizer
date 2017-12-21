@@ -79,10 +79,7 @@
                 fileDifToCollapseRegex = RegExp(fileDifToCollapseRegexString);
             }
 
-            //For whatever reason the collapsing won't work unless there is a slight delay
-            setTimeout(() => {
-                collapseDiffs();
-            }, 200);
+            collapseDiffs();
         });
     }
 })();
