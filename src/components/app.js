@@ -46,7 +46,8 @@ export default class App extends Component {
     }
 
     deleteFileDiffCollapseSetting = (id) => {
-        this.state.fileDiffCollapseSettings = _.remove(this.state.fileDiffCollapseSettings, (setting) => {
+
+        _.remove(this.state.fileDiffCollapseSettings, (setting) => {
             return setting.id === id;
         });
 
@@ -100,25 +101,7 @@ export default class App extends Component {
                     updateFileDiffCollapseSetting={this.updateFileDiffCollapseSetting}
                     fileDiffCollapseSettings={this.state.fileDiffCollapseSettings} 
                 />
-                <Switch />
             </Paper>
         );
     }
 }
-
-
-
-
-// document.addEventListener('DOMContentLoaded', () => {
-
-//   var input = document.getElementById('fileRegexInput');
-
-//   input.addEventListener('change', () => {
-//     var items = {};
-//     items[key] = input.value;
-
-//     chrome.storage.sync.set(items, function () {
-//       console.log("fileDifRegex update stored");
-//     });
-//   });
-// });
