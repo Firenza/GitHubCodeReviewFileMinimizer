@@ -8,8 +8,18 @@ import Tooltip from 'material-ui/Tooltip/Tooltip';
 
 const addButtonStyle = {
     marginTop: "10px",
-    marginBottom : "10px"
-}
+    marginBottom: "10px"
+};
+
+const titleStyle = {
+    marginTop: "30px"
+};
+
+const headerStyle = {
+    marginTop: "10px",
+    marginLeft: "48px",
+    marginBottom: "-15px"
+};
 
 export default class FileDiffCollapseRegexes extends Component {
     constructor(props) {
@@ -20,9 +30,16 @@ export default class FileDiffCollapseRegexes extends Component {
         return (
             <Grid container>
                 <Grid item xs={12}>
-                    <Typography type="subheading" gutterBottom>
-                        File Diff Collapsing.  Collapse diff when filename
+                    <Grid container justify="center">
+                        <Typography style={titleStyle} type="title">
+                            File Diff Collapsing
                         </Typography>
+                    </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography style={headerStyle} type="body2">
+                        Collapse file diff when file path ...
+                    </Typography>
                 </Grid>
                 <Grid item xs={12}>
                     {
