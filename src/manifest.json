@@ -14,7 +14,7 @@
       "24": "images/PR_24x24.png", 
       "32": "images/PR_32x32.png" 
     },
-    "default_popup": "popup.html",
+    "default_popup": "index.html",
     "default_title": "GitHub Pull Request Enhancer"
   },
   "permissions": [
