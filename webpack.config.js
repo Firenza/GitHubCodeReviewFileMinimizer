@@ -27,6 +27,7 @@ module.exports = {
             { from: 'src/background.js' },
             { from: 'src/contentScript.js'},
             { from: 'src/images/*', to: 'images', flatten: true},
+            { from: 'node_modules/jquery/dist/jquery.min.js', flatten: true}
         ], {
                 ignore: [
                 ],
