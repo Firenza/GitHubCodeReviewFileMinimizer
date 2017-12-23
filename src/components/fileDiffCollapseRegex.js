@@ -18,6 +18,10 @@ export default class FileDiffCollapseRegex extends Component {
         this.state = this.props.fileDiffCollapseSetting;
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState(nextProps.fileDiffCollapseSetting);
+    }
+
     debouncedUpdated = _.debounce(this.props.updateFileDiffCollapseSetting, 150);
 
     handleInputChange = event => {
