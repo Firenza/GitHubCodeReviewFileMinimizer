@@ -18,12 +18,14 @@
   },
   "homepage": "https://github.com/Firenza/GitHubPullRequestEnhancer#readme",
   "dependencies": {
+    "jquery": "^3.2.1",
     "lodash": "^4.17.4",
     "material-ui": "^1.0.0-beta.25",
     "material-ui-icons": "^1.0.0-beta.17",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "uuid": "^3.1.0"
+    "uuid": "^3.1.0",
+    "webpack-chrome-extension-reloader": "^0.6.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
