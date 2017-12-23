@@ -1,7 +1,8 @@
 const webpack = require('webpack');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-
+const ChromeExtensionReloader  = require('webpack-chrome-extension-reloader');
+ 
 module.exports = {
     watch: true,
     entry: [
@@ -34,6 +35,7 @@ module.exports = {
                 // a watch or webpack-dev-server build. Setting this
                 // to `true` copies all files.
                 copyUnmodified: true
-            })
+            }),
+        new ChromeExtensionReloader(),
     ]
 }
