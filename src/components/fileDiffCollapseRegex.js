@@ -9,6 +9,7 @@ import Input, { InputLabel } from 'material-ui/Input';
 import { MenuItem } from 'material-ui/Menu';
 import Grid from 'material-ui/Grid';
 import * as _ from 'lodash';
+import Tooltip from 'material-ui/Tooltip';
 
 const listItemStyle = {
     paddingTop: '5px',
@@ -38,7 +39,7 @@ export default class FileDiffCollapseRegex extends Component {
 
     handleSelectChange = event => {
         this.state.matchType = event.target.value;
-        
+
         this.setState(this.state);
 
         this.debouncedUpdated(this.state);
@@ -50,14 +51,14 @@ export default class FileDiffCollapseRegex extends Component {
                 <Grid container alignItems="center">
                     <Grid item xs={1}>
                         {this.props.index > 0 &&
-                          <Typography type="body2">Or</Typography>
+                            <Typography type="body2">Or</Typography>
                         }
-                    </Grid> 
+                    </Grid>
                     <Grid item xs={5}>
                         <Select
                             value={this.state.matchType}
                             onChange={this.handleSelectChange}
-                            input={<Input name="matchType" id="blah"/>}
+                            input={<Input/>}
                         >
                             <MenuItem value={"Contains"}>Contains</MenuItem>
                             <MenuItem value={"Matches Regex"}>Matches Regex</MenuItem>
@@ -71,11 +72,12 @@ export default class FileDiffCollapseRegex extends Component {
                         />
                     </Grid>
                 </Grid>
-
                 <ListItemSecondaryAction>
-                    <IconButton onClick={() => this.props.deleteFileDiffCollapseSetting(this.state.id)} aria-label="Delete">
-                        <DeleteIcon />
-                    </IconButton>
+                    <Tooltip placement="left" title="Delete condition">
+                        <IconButton onClick={() => this.props.deleteFileDiffCollapseSetting(this.state.id)} aria-label="Delete">
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
                 </ListItemSecondaryAction>
             </ListItem>
         );
