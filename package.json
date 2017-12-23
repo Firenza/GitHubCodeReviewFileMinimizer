@@ -1,6 +1,5 @@
 {
   "name": "githubcodereviewenhancer",
-  "version": "0.1.0.0",
   "description": "A Chrome extension meant to make managing GitHub pull requests easier via the following enhancements",
   "main": "background.js",
   "scripts": {
