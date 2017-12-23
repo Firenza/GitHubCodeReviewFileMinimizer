@@ -1,7 +1,11 @@
+import $ from "jquery";
+
+
 // Execute everything in the function so the variables don't have a lifetime outside 
 // the script invocation
 (function () {
-
+    const fileDiffCollapseSettingsStorageKey = "fileDiffToCollapseSettings";
+    
     // Figure out whether or not the script is running in developer mode
     // the 'update_url' manifest key is added when an extension is uploaded to the 
     // chrome web store
@@ -49,12 +53,23 @@
 
         let fileDifToCollapseRegex = undefined;
 
-        function collapseDiffs() {
+        function collapseDiffs(fileDiffCollapseSettings) {
             logDev('Collapsing Diffs');
             $('div .file-header').each(function (index) {
+                debugger;
                 let fileName = $(this).find('div.file-info').find('a').attr('title');
 
-                if (fileDifToCollapseRegex !== undefined && fileDifToCollapseRegex.test(fileName)) {
+                let match = fileDiffCollapseSettings.some((fileDiffCollapseSetting, index, array) => {
+                    if (fileDiffCollapseSetting.matchType == "Contains") {
+                        return fileName.indexOf(fileDiffCollapseSetting.matchString) >= 0
+                    }
+                    else if (fileDiffCollapseSetting.matchType == "Matches Regex") {
+                        let regex = new RegExp(fileDiffCollapseSetting.matchString);
+                        return regex.test(fileName);
+                    }
+                });
+
+                if (match) {
                     // Check to see if this diff has already been collapsed
                     let $button = $(this).find('button');
                     let isButtonInExpandedMode = $button.attr('aria-expanded');
@@ -70,16 +85,10 @@
             });
         }
 
-        let key = "fileDiffToCollapseRegex";
+        chrome.storage.sync.get(fileDiffCollapseSettingsStorageKey, (items) => {
+            let fileDiffCollapseSettings = items[fileDiffCollapseSettingsStorageKey];
 
-        chrome.storage.sync.get(key, (items) => {
-            let fileDifToCollapseRegexString = items[key];
-
-            if (fileDifToCollapseRegexString !== undefined) {
-                fileDifToCollapseRegex = RegExp(fileDifToCollapseRegexString);
-            }
-
-            collapseDiffs();
+            collapseDiffs(fileDiffCollapseSettings);
 
             logDev('Done collapsing diffs, exiting content script');
         });
