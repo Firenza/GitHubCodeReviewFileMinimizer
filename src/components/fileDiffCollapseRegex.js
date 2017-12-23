@@ -10,6 +10,10 @@ import { MenuItem } from 'material-ui/Menu';
 import Grid from 'material-ui/Grid';
 import * as _ from 'lodash';
 
+const listItemStyle = {
+    paddingTop: '5px',
+    paddingBottom: '5px'
+}
 
 export default class FileDiffCollapseRegex extends Component {
     constructor(props) {
@@ -42,7 +46,7 @@ export default class FileDiffCollapseRegex extends Component {
 
     render() {
         return (
-            <ListItem>
+            <ListItem style={listItemStyle}>
                 <Grid container alignItems="center">
                     <Grid item xs={1}>
                         {this.props.index > 0 &&
