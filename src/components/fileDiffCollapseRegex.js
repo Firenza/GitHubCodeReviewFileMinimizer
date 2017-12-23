@@ -44,7 +44,12 @@ export default class FileDiffCollapseRegex extends Component {
         return (
             <ListItem>
                 <Grid container alignItems="center">
-                    <Grid item xs={6}>
+                    <Grid item xs={1}>
+                        {this.props.index > 0 &&
+                          <Typography type="body2">Or</Typography>
+                        }
+                    </Grid> 
+                    <Grid item xs={5}>
                         <Select
                             value={this.state.matchType}
                             onChange={this.handleSelectChange}

@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
-import Typography from 'material-ui/Typography';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
 import Paper from 'material-ui/Paper';
-import Switch from 'material-ui/Switch';
 import uuidv4 from 'uuid/v4';
 import * as _ from 'lodash';
 
 import FileDiffToCollapseRegexes from './fileDiffCollapseRegexes'
+import NavBar from './navBar'
 
 const paperStyle = {
-    width: '400px',
-    height: '400px'
+    width: '400px'
 };
 
 const fillDiffCollapseSettingsStorageKey = "fileDiffToCollapseSettings";
@@ -28,7 +24,7 @@ export default class App extends Component {
     componentDidMount() {
         chrome.storage.sync.get(fillDiffCollapseSettingsStorageKey, (items) => {
             this.setState({
-                fileDiffCollapseSettings : items[fillDiffCollapseSettingsStorageKey]
+                fileDiffCollapseSettings: items[fillDiffCollapseSettingsStorageKey]
             });
         });
     }
@@ -50,7 +46,7 @@ export default class App extends Component {
         });
 
         this.setState({
-            fileDiffCollapseSettings : this.state.fileDiffCollapseSettings
+            fileDiffCollapseSettings: this.state.fileDiffCollapseSettings
         });
 
         this.persistFileDiffCollapseSettingsToChromeStorage();
@@ -60,45 +56,39 @@ export default class App extends Component {
         let newFileDiffCollapseSetting = {
             // generated a new guid for the id
             id: uuidv4(),
-            matchType : "Contains",
-            matchString : ""
+            matchType: "Contains",
+            matchString: ""
         }
 
         this.state.fileDiffCollapseSettings.push(newFileDiffCollapseSetting);
-        
+
         this.persistFileDiffCollapseSettingsToChromeStorage();
 
         // Let react know it needs to re-render child components
         this.setState({
-            fileDiffCollapseSettings : this.state.fileDiffCollapseSettings
+            fileDiffCollapseSettings: this.state.fileDiffCollapseSettings
         });
     }
 
-    persistFileDiffCollapseSettingsToChromeStorage = ()=> {
+    persistFileDiffCollapseSettingsToChromeStorage = () => {
         // Clone the settings so we don't run into weird reference issues
         var changedFileDiffCollapseSettings = Object.assign([], this.state.fileDiffCollapseSettings);
-        
+
         var items = {};
         items[fillDiffCollapseSettingsStorageKey] = changedFileDiffCollapseSettings;
-    
-        chrome.storage.sync.set(items, function () {});
+
+        chrome.storage.sync.set(items, function () { });
     }
 
     render() {
         return (
             <Paper style={paperStyle} >
-                <AppBar position="static" color="default" >
-                    <Toolbar>
-                        <Typography type="title" color="inherit" >
-                            GitHub Pull Request Helper
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
-                <FileDiffToCollapseRegexes 
+                <NavBar/>
+                <FileDiffToCollapseRegexes
                     addNewFileDiffCollapseSetting={this.addNewFileDiffCollapseSetting}
                     deleteFileDiffCollapseSetting={this.deleteFileDiffCollapseSetting}
                     updateFileDiffCollapseSetting={this.updateFileDiffCollapseSetting}
-                    fileDiffCollapseSettings={this.state.fileDiffCollapseSettings} 
+                    fileDiffCollapseSettings={this.state.fileDiffCollapseSettings}
                 />
             </Paper>
         );

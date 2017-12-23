@@ -13,13 +13,14 @@ export default class FileDiffCollapseRegexes extends Component {
         return (
             <React.Fragment>
                 <Typography type="subheading" gutterBottom>
-                    File Diff Regexes
+                    File Diff Collapsing.  Collapse diff when filename
                 </Typography>
                 {
                     this.props.fileDiffCollapseSettings.map((fileDiffCollapseSetting, index) => {
                         return (
                             <FileDiffCollapseRegex 
                                 key={index} 
+                                index={index}
                                 fileDiffCollapseSetting={fileDiffCollapseSetting}
                                 deleteFileDiffCollapseSetting={this.props.deleteFileDiffCollapseSetting} 
                                 updateFileDiffCollapseSetting={this.props.updateFileDiffCollapseSetting}
