@@ -23,8 +23,18 @@ export default class App extends Component {
 
     componentDidMount() {
         chrome.storage.sync.get(fillDiffCollapseSettingsStorageKey, (items) => {
+            let fileDiffCollapseSettings = items[fillDiffCollapseSettingsStorageKey];
+
+            if (fileDiffCollapseSettings === undefined) {
+                this.addNewFileDiffCollapseSetting("Contains", ".sln");
+                this.addNewFileDiffCollapseSetting("Contains", ".csproj");
+                this.addNewFileDiffCollapseSetting("Contains", ".vbproj");
+                this.addNewFileDiffCollapseSetting("Contains", ".dbproj");
+                this.addNewFileDiffCollapseSetting("Contains", "packages.config");
+            }
+
             this.setState({
-                fileDiffCollapseSettings: items[fillDiffCollapseSettingsStorageKey]
+                fileDiffCollapseSettings: fileDiffCollapseSettings
             });
         });
     }
@@ -52,12 +62,12 @@ export default class App extends Component {
         this.persistFileDiffCollapseSettingsToChromeStorage();
     }
 
-    addNewFileDiffCollapseSetting = () => {
+    addNewFileDiffCollapseSetting = (matchType, matchString) => {
         let newFileDiffCollapseSetting = {
             // generated a new guid for the id
             id: uuidv4(),
-            matchType: "Contains",
-            matchString: ""
+            matchType: matchType || "Contains",
+            matchString: matchString || ""
         }
 
         this.state.fileDiffCollapseSettings.push(newFileDiffCollapseSetting);
@@ -83,7 +93,7 @@ export default class App extends Component {
     render() {
         return (
             <Paper style={paperStyle} >
-                <NavBar/>
+                <NavBar />
                 <FileDiffToCollapseRegexes
                     addNewFileDiffCollapseSetting={this.addNewFileDiffCollapseSetting}
                     deleteFileDiffCollapseSetting={this.deleteFileDiffCollapseSetting}
