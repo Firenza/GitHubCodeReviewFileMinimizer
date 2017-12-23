@@ -1,21 +1,28 @@
-let key = "fileDiffToCollapseRegex";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-chrome.storage.sync.get(key, (items) => {
-  let fileDifToCollapseRegexString = items[key];
-  var input = document.getElementById('fileRegexInput');
-  input.value = fileDifToCollapseRegexString;
-});
+ReactDOM.render(<span>HEY I"M React contet</span>, document.getElementById('app'))
 
-document.addEventListener('DOMContentLoaded', () => {
 
-  var input = document.getElementById('fileRegexInput');
 
-  input.addEventListener('change', () => {
-    var items = {};
-    items[key] = input.value;
+// let key = "fileDiffToCollapseRegex";
 
-    chrome.storage.sync.set(items, function () {
-      console.log("fileDifRegex update stored");
-    });
-  });
-});
+// chrome.storage.sync.get(key, (items) => {
+//   let fileDifToCollapseRegexString = items[key];
+//   var input = document.getElementById('fileRegexInput');
+//   input.value = fileDifToCollapseRegexString;
+// });
+
+// document.addEventListener('DOMContentLoaded', () => {
+
+//   var input = document.getElementById('fileRegexInput');
+
+//   input.addEventListener('change', () => {
+//     var items = {};
+//     items[key] = input.value;
+
+//     chrome.storage.sync.set(items, function () {
+//       console.log("fileDifRegex update stored");
+//     });
+//   });
+// });
