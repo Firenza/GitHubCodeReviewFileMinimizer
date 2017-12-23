@@ -34,10 +34,8 @@ export default class App extends Component {
     }
 
     updateFileDiffCollapseSetting = (updatedSetting) => {
-        console.log("Saving updated setting %O", updatedSetting);
-        
         let index = _.findIndex(this.state.fileDiffCollapseSettings, (setting) => {
-            setting.id === updatedSetting.id
+            return setting.id === updatedSetting.id
         })
 
         this.state.fileDiffCollapseSettings.splice(index, 1, updatedSetting);
@@ -59,8 +57,6 @@ export default class App extends Component {
     }
 
     addNewFileDiffCollapseSetting = () => {
-        console.log("adding new setting");
-        
         let newFileDiffCollapseSetting = {
             // generated a new guid for the id
             id: uuidv4(),
@@ -79,8 +75,11 @@ export default class App extends Component {
     }
 
     persistFileDiffCollapseSettingsToChromeStorage = ()=> {
+        // Clone the settings so we don't run into weird reference issues
+        var changedFileDiffCollapseSettings = Object.assign([], this.state.fileDiffCollapseSettings);
+        
         var items = {};
-        items[fillDiffCollapseSettingsStorageKey] = this.state.fileDiffCollapseSettings;
+        items[fillDiffCollapseSettingsStorageKey] = changedFileDiffCollapseSettings;
     
         chrome.storage.sync.set(items, function () {});
     }
