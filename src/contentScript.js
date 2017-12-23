@@ -1,6 +1,3 @@
-import $ from "jquery";
-
-
 // Execute everything in the function so the variables don't have a lifetime outside 
 // the script invocation
 (function () {
