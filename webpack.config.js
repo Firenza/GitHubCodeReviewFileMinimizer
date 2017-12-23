@@ -4,7 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: [
-        path.join(__dirname, '/src/popup.js')
+        path.join(__dirname, '/src/index.js')
     ],
     module: {
         loaders: [{
@@ -21,7 +21,7 @@ module.exports = {
     plugins: [
         new CopyWebpackPlugin([
             { from: 'src/manifest.json'},
-            { from: 'src/popup.html'},
+            { from: 'src/index.html'},
             { from: 'src/background.js' },
             { from: 'src/contentScript.js'},
             { from: 'src/images/*', to: 'images', flatten: true},

@@ -1,7 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, {Component} from 'react';
 
-ReactDOM.render(<span>HEY I"M React contet</span>, document.getElementById('app'))
+export default class App extends Component {
+    render () {
+        return <p>This is my new react app</p>
+    }
+}
+
+
 
 
 
