@@ -53,10 +53,9 @@
         function collapseDiffs(fileDiffCollapseSettings) {
             logDev('Collapsing Diffs');
             $('div .file-header').each(function (index) {
-                debugger;
                 let fileName = $(this).find('div.file-info').find('a').attr('title');
 
-                let match = fileDiffCollapseSettings.some((fileDiffCollapseSetting, index, array) => {
+                let fileMatch = fileDiffCollapseSettings.some((fileDiffCollapseSetting, index, array) => {
                     if (fileDiffCollapseSetting.matchType == "Contains") {
                         return fileName.indexOf(fileDiffCollapseSetting.matchString) >= 0
                     }
@@ -66,7 +65,7 @@
                     }
                 });
 
-                if (match) {
+                if (fileMatch) {
                     // Check to see if this diff has already been collapsed
                     let $button = $(this).find('button');
                     let isButtonInExpandedMode = $button.attr('aria-expanded');
