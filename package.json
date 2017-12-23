@@ -1,0 +1,23 @@
+{
+  "name": "githubcodereviewenhancer",
+  "version": "1.0.0",
+  "description": "A Chrome extension meant to make managing GitHub pull requests easier via the following enhancements",
+  "main": "background.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Firenza/GitHubPullRequestEnhancer.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Firenza/GitHubPullRequestEnhancer/issues"
+  },
+  "homepage": "https://github.com/Firenza/GitHubPullRequestEnhancer#readme",
+  "dependencies": {
+    "react": "^16.2.0",
+    "webpack": "^3.10.0"
+  }
+}
