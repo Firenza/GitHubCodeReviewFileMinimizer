@@ -22,7 +22,6 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        debugger;
         chrome.storage.sync.get(fillDiffCollapseSettingsStorageKey, (items) => {
             let fileDiffCollapseSettings = items[fillDiffCollapseSettingsStorageKey];
 
