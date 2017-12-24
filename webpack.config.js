@@ -4,14 +4,19 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ChromeExtensionReloader  = require('webpack-chrome-extension-reloader');
  
 module.exports = {
-    watch: true,
+    watch : true,
     entry: [
         path.join(__dirname, '/src/index.js')
     ],
     module: {
         loaders: [{
             test: /\.(js|jsx)$/,
-            exclude: /node_modules/,
+            exclude: [/node_modules/,
+                      /bower_components/, 
+                      'src/gtm.js', 
+                      'src/contentScript.js',
+                      'src/background.js'
+                    ],
             loader: 'babel-loader'
         }
         ]
@@ -26,6 +31,7 @@ module.exports = {
             { from: 'src/index.html'},
             { from: 'src/background.js' },
             { from: 'src/contentScript.js'},
+            { from: 'src/gtm.js'},
             { from: 'src/images/*', to: 'images', flatten: true},
             { from: 'node_modules/jquery/dist/jquery.min.js', flatten: true}
         ], {
