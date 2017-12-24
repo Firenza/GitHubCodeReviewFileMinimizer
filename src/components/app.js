@@ -22,6 +22,7 @@ export default class App extends Component {
     }
 
     componentDidMount() {
+        debugger;
         chrome.storage.sync.get(fillDiffCollapseSettingsStorageKey, (items) => {
             let fileDiffCollapseSettings = items[fillDiffCollapseSettingsStorageKey];
 
@@ -32,10 +33,6 @@ export default class App extends Component {
                 this.addNewFileDiffCollapseSetting("Contains", ".dbproj");
                 this.addNewFileDiffCollapseSetting("Contains", "packages.config");
             }
-
-            this.setState({
-                fileDiffCollapseSettings: fileDiffCollapseSettings
-            });
         });
     }
 
