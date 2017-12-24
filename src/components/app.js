@@ -26,7 +26,13 @@ export default class App extends Component {
         chrome.storage.sync.get(fillDiffCollapseSettingsStorageKey, (items) => {
             let fileDiffCollapseSettings = items[fillDiffCollapseSettingsStorageKey];
 
-            if (fileDiffCollapseSettings === undefined) {
+            if (fileDiffCollapseSettings !== undefined) {
+                this.setState({
+                    fileDiffCollapseSettings: fileDiffCollapseSettings
+                });
+            } 
+            else{
+                // Set some default info if there is no existing data
                 this.addNewFileDiffCollapseSetting("Contains", ".sln");
                 this.addNewFileDiffCollapseSetting("Contains", ".csproj");
                 this.addNewFileDiffCollapseSetting("Contains", ".vbproj");
