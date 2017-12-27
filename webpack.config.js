@@ -13,7 +13,6 @@ module.exports = {
             test: /\.(js|jsx)$/,
             exclude: [/node_modules/,
                       /bower_components/, 
-                      'src/gtm.js', 
                       'src/contentScript.js',
                       'src/background.js'
                     ],
@@ -31,7 +30,6 @@ module.exports = {
             { from: 'src/index.html'},
             { from: 'src/background.js' },
             { from: 'src/contentScript.js'},
-            { from: 'src/gtm.js'},
             { from: 'src/images/*', to: 'images', flatten: true},
             { from: 'node_modules/jquery/dist/jquery.min.js', flatten: true}
         ], {
