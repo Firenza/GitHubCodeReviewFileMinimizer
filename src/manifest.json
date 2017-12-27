@@ -3,7 +3,7 @@
   "name": "GitHub Pull Request Enhancer",
   "description": "Adds functionality to GitHub's pull request pages that increase developer productivity",
   "version": "0.2.0.0",
-  "content_security_policy": "script-src 'self' https://www.google-analytics.com https://www.googletagmanager.com; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://www.google-analytics.com/; object-src 'self'",
   "background": {
     "scripts": [
       "background.js"

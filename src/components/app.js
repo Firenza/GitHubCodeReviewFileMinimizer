@@ -38,6 +38,11 @@ export default class App extends Component {
                 this.addNewFileDiffCollapseSetting("Contains", ".dbproj");
                 this.addNewFileDiffCollapseSetting("Contains", "packages.config");
             }
+
+            // Setup the google analtyics queues
+            window.ga=window.ga || function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+            ga('create', 'UA-36364890-2', 'auto');
+            ga('send', 'pageview');
         });
     }
 
@@ -53,6 +58,8 @@ export default class App extends Component {
 
     deleteFileDiffCollapseSetting = (id) => {
 
+        ga('send', 'event', 'ConditionDelete', 'Click');
+
         _.remove(this.state.fileDiffCollapseSettings, (setting) => {
             return setting.id === id;
         });
@@ -65,6 +72,9 @@ export default class App extends Component {
     }
 
     addNewFileDiffCollapseSetting = (matchType, matchString) => {
+        
+        ga('send', 'event', 'ConditionAdd', 'Click');
+        
         let newFileDiffCollapseSetting = {
             // generated a new guid for the id
             id: uuidv4(),
