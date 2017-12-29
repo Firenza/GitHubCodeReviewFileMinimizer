@@ -58,12 +58,17 @@
             logDev('Collapsing Diffs');
             $('div .file-header').each(function (index) {
                 let fileName = $(this).find('div.file-info').find('a').attr('title');
+                let diffSettingThatMatched = null;
 
                 let fileMatch = fileDiffCollapseSettings.some((fileDiffCollapseSetting, index, array) => {
                     if (fileDiffCollapseSetting.matchType == "Contains") {
+                        diffSettingThatMatched = fileDiffCollapseSetting;
+                       
                         return fileName.indexOf(fileDiffCollapseSetting.matchString) >= 0
                     }
                     else if (fileDiffCollapseSetting.matchType == "Matches Regex") {
+                        diffSettingThatMatched = fileDiffCollapseSetting;
+                       
                         let regex = new RegExp(fileDiffCollapseSetting.matchString);
                         return regex.test(fileName);
                     }
@@ -75,6 +80,8 @@
                     let isButtonInExpandedMode = $button.attr('aria-expanded');
 
                     if (isButtonInExpandedMode) {
+
+                        chrome.runtime.sendMessage({type: "diffCollapsed", payload: diffSettingThatMatched});
 
                         // Directly doing the css updates that the button click does works more reliably that mimicing
                         // a button click so do that
