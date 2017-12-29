@@ -19,21 +19,11 @@ chrome.runtime.onMessage.addListener(
             ga('send', 'event', {
                 eventCategory: 'File Diff Collapse',
                 eventAction: 'file diff setting triggered',
-                eventLabel: request.payload.diffSettingThatMatched.matchType + ' | ' + request.payload.diffSettingThatMatched.matchString
+                dimension1: request.payload.diffSettingThatMatched.matchType,
+                dimension2: request.payload.diffSettingThatMatched.matchString,
+                metric1: request.payload.linesInDiff
             });
         }
-});
-
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-
-        if (request.type === "diffCollapseFinished"){
-            ga('send', 'event', {
-                eventCategory: 'File Diff Collapse',
-                eventAction: 'total code lines collapsed',
-                eventLabel: request.payload.totalDiffLinesCollapsed.toString()
-        });
-    }
 });
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
