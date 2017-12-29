@@ -22,12 +22,8 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        // Create our tracker
-        ga('create', 'UA-36364890-2', 'auto');
-        // Disable this check so requests from the chrome-extension:// host get sent
-        ga('set', 'checkProtocolTask', function(){ /* nothing */ });
-        // Log that someone opened the extension UIs
-        ga('send', 'pageview', '/index.html');
+  
+        chrome.runtime.sendMessage({type: "extensionUILoaded", payload: {}});
 
         chrome.storage.sync.get(fillDiffCollapseSettingsStorageKey, (items) => {
             let fileDiffCollapseSettings = items[fillDiffCollapseSettingsStorageKey];
@@ -49,6 +45,9 @@ export default class App extends Component {
     }
 
     updateFileDiffCollapseSetting = (updatedSetting) => {
+        
+        chrome.runtime.sendMessage({type: "diffConditionUpdated", payload: {updatedDiffCondition: updatedSetting}});
+        
         let index = _.findIndex(this.state.fileDiffCollapseSettings, (setting) => {
             return setting.id === updatedSetting.id
         })
@@ -62,13 +61,7 @@ export default class App extends Component {
 
         let diffToDelete = _.find(this.state.fileDiffCollapseSettings, (dif) => { return dif.id === id});
 
-        ga('send', 'event', {
-            eventCategory: 'File Diff Interaction',
-            eventAction: 'delete condition click',
-            eventLabel: diffToDelete.matchType + ' | ' + diffToDelete.matchString,
-            dimension1: diffToDelete.matchtype,
-            dimension2: diffToDelete.matchString
-        });
+        chrome.runtime.sendMessage({type: "diffConditionDeleted", payload: {diffToDelete: diffToDelete}});
 
         _.remove(this.state.fileDiffCollapseSettings, (setting) => {
             return setting.id === id;
@@ -83,11 +76,8 @@ export default class App extends Component {
 
     addNewFileDiffCollapseSetting = (matchType, matchString) => {
 
-        ga('send', 'event', {
-            eventCategory: 'File Diff Interaction',
-            eventAction: 'add new condition click'
-        });
-        
+        chrome.runtime.sendMessage({type: "diffConditionAdded", payload: {matchType: matchType, matchString: matchString}});
+
         let newFileDiffCollapseSetting = {
             // generated a new guid for the id
             id: uuidv4(),
