@@ -26,10 +26,12 @@
     if (fileDiffsContainer !== null) {
        
         let mutationHandler = (mutationRecords) => {
+            logDev("Mutation handler triggered");
+
             mutationRecords.forEach(function (mutation) {
-                // Only care about this event if stuff got added to the DOM
-                if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
-                    logDev("Mutation handler triggered");
+                // Only care about this event if stuff got added to the DOM and the target was the diff container
+                if (mutation.type === "childList"  && $(mutation.target).hasClass('js-diff-progressive-container') && mutation.addedNodes.length > 0) {
+                    logDev("Mutation logic executing");
 
                     collapseDiffs(fileDiffCollapseSettings);
 
@@ -37,7 +39,7 @@
                     // to watch for one mutation
                     observer.disconnect();
 
-                    logDev("Done collapsing diffs after Mutation trigger");
+                    logDev("Done executing mutation logi");
                 }
             });
         }
