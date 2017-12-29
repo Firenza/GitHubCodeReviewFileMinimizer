@@ -25,20 +25,52 @@ chrome.runtime.onMessage.addListener(
                 metric1: request.payload.linesInDiff
             });
         }
-});
 
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    if (changeInfo.status === "complete" && pullRequestFilePageUrlRegex.test(tab.url)) {
-        try {
-            chrome.tabs.executeScript(null, {file: "jquery.min.js"});
-            chrome.tabs.executeScript(null, {file: "contentscript.js"});
-        } catch (error) {
-            ga('send', 'exception', {
-                'exDescription': error.message,
-                'exFatal': true
+        if (request.type === 'diffConditionDeleted') {
+            ga('send', 'event', {
+                eventCategory: 'File Diff Interaction',
+                eventAction: 'delete condition click',
+                eventLabel: request.payload.diffToDelete.matchType + ' | ' + request.payload.diffToDelete.diffToDelete.matchString,
+                dimension1: request.payload.diffToDelete.diffToDelete.matchtype,
+                dimension2: request.payload.diffToDelete.diffToDelete.matchString
             });
-
-            throw error;
         }
-    }
+
+        if (request.type === 'diffConditionAdded') {
+            ga('send', 'event', {
+                eventCategory: 'File Diff Interaction',
+                eventAction: 'add new condition click'
+            });
+        }
+
+        if (request.type === 'diffConditionUpdated') {
+            ga('send', 'event', {
+                eventCategory: 'File Diff Interaction',
+                eventAction: 'add new condition click'
+            });
+        }
+
+        if (request.type === 'extensionUILoaded') {
+            // Log that someone opened the extension UIs
+            ga('send', 'pageview', '/index.html');
+        }
+    }  
+);
+
+chrome.tabs.onUpdated.addListener(
+    function(tabId, changeInfo, tab) {
+        if (changeInfo.status === "complete" && pullRequestFilePageUrlRegex.test(tab.url)) {
+            try {
+                chrome.tabs.executeScript(null, {file: "lodash.min.js"});
+                chrome.tabs.executeScript(null, {file: "jquery.min.js"});
+                chrome.tabs.executeScript(null, {file: "contentscript.js"});
+            } catch (error) {
+                ga('send', 'exception', {
+                    'exDescription': error.message,
+                    'exFatal': true
+                });
+
+                throw error;
+            }
+        }
 });
