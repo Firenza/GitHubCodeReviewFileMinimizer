@@ -14,14 +14,27 @@ ga('set', 'checkProtocolTask', function(){ /* nothing */ });
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
 
-      if (request.type === "diffCollapsed"){
+        if (request.type === "diffCollapsed"){
+
             ga('send', 'event', {
                 eventCategory: 'File Diff Collapse',
-                eventAction: 'collapse file diff',
-                eventLabel: request.payload.matchType + ' | ' + request.payload.matchString
+                eventAction: 'file diff setting triggered',
+                eventLabel: request.payload.diffSettingThatMatched.matchType + ' | ' + request.payload.diffSettingThatMatched.matchString
             });
-       }
-    });
+        }
+});
+
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+
+        if (request.type === "diffCollapseFinished"){
+            ga('send', 'event', {
+                eventCategory: 'File Diff Collapse',
+                eventAction: 'total code lines collapsed',
+                eventLabel: request.payload.totalDiffLinesCollapsed.toString()
+        });
+    }
+});
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if (changeInfo.status === "complete" && pullRequestFilePageUrlRegex.test(tab.url)) {
