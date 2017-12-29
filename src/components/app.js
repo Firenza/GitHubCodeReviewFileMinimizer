@@ -22,6 +22,13 @@ export default class App extends Component {
     }
 
     componentDidMount() {
+        // Create our tracker
+        ga('create', 'UA-36364890-2', 'auto');
+        // Disable this check so requests from the chrome-extension:// host get sent
+        ga('set', 'checkProtocolTask', function(){ /* nothing */ });
+        // Log that someone opened the extension UIs
+        ga('send', 'pageview', '/index.html');
+
         chrome.storage.sync.get(fillDiffCollapseSettingsStorageKey, (items) => {
             let fileDiffCollapseSettings = items[fillDiffCollapseSettingsStorageKey];
 
@@ -38,11 +45,6 @@ export default class App extends Component {
                 this.addNewFileDiffCollapseSetting("Contains", ".dbproj");
                 this.addNewFileDiffCollapseSetting("Contains", "packages.config");
             }
-
-            // Setup the google analtyics queues
-            window.ga=window.ga || function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-            ga('create', 'UA-36364890-2', 'auto');
-            ga('send', 'pageview');
         });
     }
 
@@ -58,7 +60,13 @@ export default class App extends Component {
 
     deleteFileDiffCollapseSetting = (id) => {
 
-        ga('send', 'event', 'ConditionDelete', 'Click');
+        let diffToDelete = _.find(this.state.fileDiffCollapseSettings, (dif) => { return dif.id === id});
+
+        ga('send', 'event', {
+            eventCategory: 'File Diff Interaction',
+            eventAction: 'delete condition click',
+            eventLabel: diffToDelete.matchType + ' | ' + diffToDelete.matchString
+        });
 
         _.remove(this.state.fileDiffCollapseSettings, (setting) => {
             return setting.id === id;
@@ -72,8 +80,11 @@ export default class App extends Component {
     }
 
     addNewFileDiffCollapseSetting = (matchType, matchString) => {
-        
-        ga('send', 'event', 'ConditionAdd', 'Click');
+
+        ga('send', 'event', {
+            eventCategory: 'File Diff Interaction',
+            eventAction: 'add new condition click'
+        });
         
         let newFileDiffCollapseSetting = {
             // generated a new guid for the id
@@ -102,10 +113,26 @@ export default class App extends Component {
         chrome.storage.sync.set(items, function () { });
     }
 
+    navigateToGitHubRepo = () => {
+        let repoUrl = "https://github.com/Firenza/GitHubPullRequestEnhancer";
+
+        ga('send', 'event', {
+            eventCategory: 'Outbound Link',
+            eventAction: 'click',
+            eventLabel: repoUrl,
+            // Only open the new tab after the analytics even has been sent as the extension js code stop executing as soon as chrome
+            // opens the new tab
+            hitCallback: () => {
+                chrome.tabs.create({ url: "https://github.com/Firenza/GitHubPullRequestEnhancer" });
+            }
+
+        });
+    }
+
     render() {
         return (
             <Paper style={paperStyle} >
-                <NavBar />
+                <NavBar navigateToGitHubRepo={this.navigateToGitHubRepo}/>
                 <FileDiffToCollapseRegexes
                     addNewFileDiffCollapseSetting={this.addNewFileDiffCollapseSetting}
                     deleteFileDiffCollapseSetting={this.deleteFileDiffCollapseSetting}
