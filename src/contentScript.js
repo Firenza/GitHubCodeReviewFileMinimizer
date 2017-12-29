@@ -62,16 +62,20 @@
                 let diffSettingThatMatched = null;
 
                 let fileMatch = fileDiffCollapseSettings.some((fileDiffCollapseSetting, index, array) => {
-                    if (fileDiffCollapseSetting.matchType == "Contains") {
-                        diffSettingThatMatched = fileDiffCollapseSetting;
-                       
-                        return fileName.indexOf(fileDiffCollapseSetting.matchString) >= 0
-                    }
-                    else if (fileDiffCollapseSetting.matchType == "Matches Regex") {
-                        diffSettingThatMatched = fileDiffCollapseSetting;
-                       
-                        let regex = new RegExp(fileDiffCollapseSetting.matchString);
-                        return regex.test(fileName);
+                    let isMatchStringNullOrWhitespace = !fileDiffCollapseSetting.matchString || !fileDiffCollapseSetting.matchString.trim();
+                    
+                    if (!isMatchStringNullOrWhitespace) {
+                        if (fileDiffCollapseSetting.matchType == "Contains") {
+                            diffSettingThatMatched = fileDiffCollapseSetting;
+                           
+                            return fileName.indexOf(fileDiffCollapseSetting.matchString) >= 0
+                        }
+                        else if (fileDiffCollapseSetting.matchType == "Matches Regex") {
+                            diffSettingThatMatched = fileDiffCollapseSetting;
+                           
+                            let regex = new RegExp(fileDiffCollapseSetting.matchString);
+                            return regex.test(fileName);
+                        }
                     }
                 });
 
