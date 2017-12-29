@@ -26,10 +26,12 @@
     if (fileDiffsContainer !== null) {
        
         let mutationHandler = (mutationRecords) => {
+            logDev("Mutation handler triggered");
+
             mutationRecords.forEach(function (mutation) {
-                // Only care about this event if stuff got added to the DOM
-                if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
-                    logDev("Mutation handler triggered");
+                // Only care about this event if stuff got added to the DOM and the target was the diff container
+                if (mutation.type === "childList"  && $(mutation.target).hasClass('js-diff-progressive-container') && mutation.addedNodes.length > 0) {
+                    logDev("Mutation logic executing");
 
                     collapseDiffs(fileDiffCollapseSettings);
 
@@ -37,7 +39,7 @@
                     // to watch for one mutation
                     observer.disconnect();
 
-                    logDev("Done collapsing diffs after Mutation trigger");
+                    logDev("Done executing mutation logi");
                 }
             });
         }
@@ -54,16 +56,26 @@
 
         function collapseDiffs(fileDiffCollapseSettings) {
             logDev('Collapsing Diffs');
+            
             $('div .file-header').each(function (index) {
                 let fileName = $(this).find('div.file-info').find('a').attr('title');
+                let diffSettingThatMatched = null;
 
                 let fileMatch = fileDiffCollapseSettings.some((fileDiffCollapseSetting, index, array) => {
-                    if (fileDiffCollapseSetting.matchType == "Contains") {
-                        return fileName.indexOf(fileDiffCollapseSetting.matchString) >= 0
-                    }
-                    else if (fileDiffCollapseSetting.matchType == "Matches Regex") {
-                        let regex = new RegExp(fileDiffCollapseSetting.matchString);
-                        return regex.test(fileName);
+                    let isMatchStringNullOrWhitespace = !fileDiffCollapseSetting.matchString || !fileDiffCollapseSetting.matchString.trim();
+                    
+                    if (!isMatchStringNullOrWhitespace) {
+                        if (fileDiffCollapseSetting.matchType == "Contains") {
+                            diffSettingThatMatched = fileDiffCollapseSetting;
+                           
+                            return fileName.indexOf(fileDiffCollapseSetting.matchString) >= 0
+                        }
+                        else if (fileDiffCollapseSetting.matchType == "Matches Regex") {
+                            diffSettingThatMatched = fileDiffCollapseSetting;
+                           
+                            let regex = new RegExp(fileDiffCollapseSetting.matchString);
+                            return regex.test(fileName);
+                        }
                     }
                 });
 
@@ -73,6 +85,9 @@
                     let isButtonInExpandedMode = $button.attr('aria-expanded');
 
                     if (isButtonInExpandedMode) {
+                        let linesInDiff = $(this).find('span.diffstat').text();
+
+                        chrome.runtime.sendMessage({type: "diffCollapsed", payload: {diffSettingThatMatched: diffSettingThatMatched, linesInDiff: parseInt(linesInDiff)}});
 
                         // Directly doing the css updates that the button click does works more reliably that mimicing
                         // a button click so do that
