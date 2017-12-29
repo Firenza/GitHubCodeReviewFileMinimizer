@@ -22,6 +22,9 @@ export default class App extends Component {
     }
 
     componentDidMount() {
+  
+        chrome.runtime.sendMessage({type: "extensionUILoaded", payload: {}});
+
         chrome.storage.sync.get(fillDiffCollapseSettingsStorageKey, (items) => {
             let fileDiffCollapseSettings = items[fillDiffCollapseSettingsStorageKey];
 
@@ -42,6 +45,9 @@ export default class App extends Component {
     }
 
     updateFileDiffCollapseSetting = (updatedSetting) => {
+        
+        chrome.runtime.sendMessage({type: "diffConditionUpdated", payload: {updatedDiffCondition: updatedSetting}});
+        
         let index = _.findIndex(this.state.fileDiffCollapseSettings, (setting) => {
             return setting.id === updatedSetting.id
         })
@@ -52,6 +58,10 @@ export default class App extends Component {
     }
 
     deleteFileDiffCollapseSetting = (id) => {
+
+        let diffToDelete = _.find(this.state.fileDiffCollapseSettings, (dif) => { return dif.id === id});
+
+        chrome.runtime.sendMessage({type: "diffConditionDeleted", payload: {diffToDelete: diffToDelete}});
 
         _.remove(this.state.fileDiffCollapseSettings, (setting) => {
             return setting.id === id;
@@ -65,6 +75,9 @@ export default class App extends Component {
     }
 
     addNewFileDiffCollapseSetting = (matchType, matchString) => {
+
+        chrome.runtime.sendMessage({type: "diffConditionAdded", payload: {matchType: matchType, matchString: matchString}});
+
         let newFileDiffCollapseSetting = {
             // generated a new guid for the id
             id: uuidv4(),
@@ -92,10 +105,26 @@ export default class App extends Component {
         chrome.storage.sync.set(items, function () { });
     }
 
+    navigateToGitHubRepo = () => {
+        let repoUrl = "https://github.com/Firenza/GitHubPullRequestEnhancer";
+
+        ga('send', 'event', {
+            eventCategory: 'Outbound Link',
+            eventAction: 'click',
+            eventLabel: repoUrl,
+            // Only open the new tab after the analytics even has been sent as the extension js code stop executing as soon as chrome
+            // opens the new tab
+            hitCallback: () => {
+                chrome.tabs.create({ url: "https://github.com/Firenza/GitHubPullRequestEnhancer" });
+            }
+
+        });
+    }
+
     render() {
         return (
             <Paper style={paperStyle} >
-                <NavBar />
+                <NavBar navigateToGitHubRepo={this.navigateToGitHubRepo}/>
                 <FileDiffToCollapseRegexes
                     addNewFileDiffCollapseSetting={this.addNewFileDiffCollapseSetting}
                     deleteFileDiffCollapseSetting={this.deleteFileDiffCollapseSetting}
