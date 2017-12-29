@@ -56,6 +56,9 @@
 
         function collapseDiffs(fileDiffCollapseSettings) {
             logDev('Collapsing Diffs');
+            
+            let totalDiffLinesCollapsed = 0;
+
             $('div .file-header').each(function (index) {
                 let fileName = $(this).find('div.file-info').find('a').attr('title');
                 let diffSettingThatMatched = null;
@@ -80,8 +83,10 @@
                     let isButtonInExpandedMode = $button.attr('aria-expanded');
 
                     if (isButtonInExpandedMode) {
+                        let linesInDiff = $(this).find('span.diffstat').text();
+                        totalDiffLinesCollapsed += parseInt(linesInDiff);
 
-                        chrome.runtime.sendMessage({type: "diffCollapsed", payload: diffSettingThatMatched});
+                        chrome.runtime.sendMessage({type: "diffCollapsed", payload: {diffSettingThatMatched: diffSettingThatMatched}});
 
                         // Directly doing the css updates that the button click does works more reliably that mimicing
                         // a button click so do that
@@ -90,6 +95,10 @@
                     }
                 }
             });
+
+            if (totalDiffLinesCollapsed > 0) {
+                chrome.runtime.sendMessage({type: "diffCollapseFinished", payload: {totalDiffLinesCollapsed : totalDiffLinesCollapsed}});
+            }
         }
 
         chrome.storage.sync.get(fileDiffCollapseSettingsStorageKey, (items) => {
