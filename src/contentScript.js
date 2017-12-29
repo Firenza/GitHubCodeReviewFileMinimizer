@@ -13,6 +13,8 @@
         }
     }
 
+    let fileDiffCollapseSettings = null;
+
     logDev("Executing Content Script");
 
     let fileDiffsContainer = document.getElementById('files');
@@ -29,7 +31,7 @@
                 if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
                     logDev("Mutation handler triggered");
 
-                    collapseDiffs();
+                    collapseDiffs(fileDiffCollapseSettings);
 
                     // There is only one delayed request to get more diff data so we only need
                     // to watch for one mutation
@@ -82,7 +84,7 @@
         }
 
         chrome.storage.sync.get(fileDiffCollapseSettingsStorageKey, (items) => {
-            let fileDiffCollapseSettings = items[fileDiffCollapseSettingsStorageKey];
+            fileDiffCollapseSettings = items[fileDiffCollapseSettingsStorageKey];
 
             collapseDiffs(fileDiffCollapseSettings);
 
