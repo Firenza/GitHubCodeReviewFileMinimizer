@@ -65,6 +65,7 @@ export default class App extends Component {
         ga('send', 'event', {
             eventCategory: 'File Diff Interaction',
             eventAction: 'delete condition click',
+            eventLabel: diffToDelete.matchType + ' | ' + diffToDelete.matchString,
             dimension1: diffToDelete.matchtype,
             dimension2: diffToDelete.matchString
         });

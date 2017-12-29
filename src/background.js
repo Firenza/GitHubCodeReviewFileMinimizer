@@ -19,6 +19,7 @@ chrome.runtime.onMessage.addListener(
             ga('send', 'event', {
                 eventCategory: 'File Diff Collapse',
                 eventAction: 'file diff setting triggered',
+                eventLabel: request.payload.diffSettingThatMatched.matchType + ' | ' + request.payload.diffSettingThatMatched.matchString,
                 dimension1: request.payload.diffSettingThatMatched.matchType,
                 dimension2: request.payload.diffSettingThatMatched.matchString,
                 metric1: request.payload.linesInDiff
