@@ -108,17 +108,7 @@ export default class App extends Component {
     navigateToGitHubRepo = () => {
         let repoUrl = "https://github.com/Firenza/GitHubPullRequestEnhancer";
 
-        ga('send', 'event', {
-            eventCategory: 'Outbound Link',
-            eventAction: 'click',
-            eventLabel: repoUrl,
-            // Only open the new tab after the analytics even has been sent as the extension js code stop executing as soon as chrome
-            // opens the new tab
-            hitCallback: () => {
-                chrome.tabs.create({ url: "https://github.com/Firenza/GitHubPullRequestEnhancer" });
-            }
-
-        });
+        chrome.runtime.sendMessage({type: "externalNavigationRequested", payload: {url: repoUrl}});
     }
 
     render() {

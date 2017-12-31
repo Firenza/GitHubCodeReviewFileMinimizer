@@ -89,6 +89,17 @@ chrome.runtime.onMessage.addListener(
             deboundedDiffConditionHandler(request.payload.updatedDiffCondition);
         }
 
+        if (request.type === 'externalNavigationRequested') {
+    
+            ga('send', 'event', {
+                eventCategory: 'Outbound Link',
+                eventAction: 'click',
+                eventLabel: request.payload.url,
+            });
+
+            chrome.tabs.create({ url: request.payload.url });
+        }
+
         if (request.type === 'extensionUILoaded') {
             // Log that someone opened the extension UIs
             ga('send', 'pageview', '/index.html');
