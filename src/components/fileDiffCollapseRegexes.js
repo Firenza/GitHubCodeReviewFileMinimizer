@@ -8,7 +8,8 @@ import Tooltip from 'material-ui/Tooltip/Tooltip';
 
 const addButtonStyle = {
     marginTop: "10px",
-    marginBottom: "10px"
+    marginBottom: "10px",
+    marginRight: "18px"
 };
 
 const titleStyle = {
@@ -57,7 +58,7 @@ export default class FileDiffCollapseRegexes extends Component {
                     }
                 </Grid>
                 <Grid item xs={12}>
-                    <Grid container justify="center">
+                    <Grid container justify="flex-end">
                         <Tooltip placement="right" title="Add new contition">
                             <Button style={addButtonStyle} mini onClick={() => this.props.addNewFileDiffCollapseSetting()} fab color="primary" aria-label="add">
                                 <AddIcon />
