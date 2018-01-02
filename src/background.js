@@ -1,3 +1,5 @@
+import * as _ from 'lodash';
+
 var pullRequestFilePageUrlRegex = new RegExp('github[^\/]*\/[^\/]+\/[^\/]+\/pull\/[^\/]+\/files');
 
 // Load the google analytics code
@@ -111,9 +113,7 @@ chrome.tabs.onUpdated.addListener(
     function(tabId, changeInfo, tab) {
         if (changeInfo.status === "complete" && pullRequestFilePageUrlRegex.test(tab.url)) {
             try {
-                chrome.tabs.executeScript(null, {file: "lodash.min.js"});
-                chrome.tabs.executeScript(null, {file: "jquery.min.js"});
-                chrome.tabs.executeScript(null, {file: "contentscript.js"});
+                chrome.tabs.executeScript(null, {file: "content_bundle.js"});
             } catch (error) {
                 ga('send', 'exception', {
                     'exDescription': error.message,
