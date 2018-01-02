@@ -1,38 +1,38 @@
 const webpack = require('webpack');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ChromeExtensionReloader  = require('webpack-chrome-extension-reloader');
- 
+const ChromeExtensionReloader = require('webpack-chrome-extension-reloader');
+
 module.exports = {
-    watch : true,
-    entry: [
-        path.join(__dirname, '/src/index.js')
-    ],
+    watch: true,
+    entry: {
+        popup: './src/popup.js',
+        background: './src/background.js',
+        content: './src/content.js',
+    },
     module: {
-        loaders: [{
-            test: /\.(js|jsx)$/,
-            exclude: [/node_modules/,
-                      /bower_components/, 
-                      'src/contentScript.js',
-                      'src/background.js'
-                    ],
-            loader: 'babel-loader'
-        }
+        rules: [
+            {
+                test: /\.(js|jsx)$/,
+                loader: 'babel-loader',
+                exclude: /node_modules|src\/images/
+            }
         ]
     },
     output: {
         path: __dirname + '/dist',
-        filename: 'bundle.js'
+        filename: '[name]_bundle.js'
     },
     plugins: [
+        // Auto load jquery globals as needed
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery'
+        }),
         new CopyWebpackPlugin([
-            { from: 'src/manifest.json'},
-            { from: 'src/index.html'},
-            { from: 'src/background.js' },
-            { from: 'src/contentScript.js'},
-            { from: 'src/images/*', to: 'images', flatten: true},
-            { from: 'node_modules/jquery/dist/jquery.min.js', flatten: true},
-            { from: 'node_modules/lodash/lodash.min.js', flatten: true}
+            { from: 'src/manifest.json' },
+            { from: 'src/popup.html' },
+            { from: 'src/images/*.png', to: 'images', flatten: true }
         ]),
         new ChromeExtensionReloader(),
     ]
