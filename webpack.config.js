@@ -4,7 +4,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ChromeExtensionReloader = require('webpack-chrome-extension-reloader');
 
 module.exports = {
-    watch: true,
     entry: {
         popup: './src/popup.js',
         background: './src/background.js',
