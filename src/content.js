@@ -1,10 +1,11 @@
 import * as _ from 'lodash';
+import {insertWhitespaceDiffToggle} from './contentScripts/diffWhitespace'
 
 // Execute everything in the function so the variables don't have a lifetime outside 
 // the script invocation
 (function () {
     const fileDiffCollapseSettingsStorageKey = "fileDiffToCollapseSettings";
-    
+
     // Figure out whether or not the script is running in developer mode
     // the 'update_url' manifest key is added when an extension is uploaded to the 
     // chrome web store
@@ -26,13 +27,13 @@ import * as _ from 'lodash';
     // In this case we can just bail out of the script since it should get triggered again once
     // the page is fully rendered.
     if (fileDiffsContainer !== null) {
-       
+
         let mutationHandler = (mutationRecords) => {
             logDev("Mutation handler triggered");
 
             mutationRecords.forEach(function (mutation) {
                 // Only care about this event if stuff got added to the DOM and the target was the diff container
-                if (mutation.type === "childList"  && $(mutation.target).hasClass('js-diff-progressive-container') && mutation.addedNodes.length > 0) {
+                if (mutation.type === "childList" && $(mutation.target).hasClass('js-diff-progressive-container') && mutation.addedNodes.length > 0) {
                     logDev("Mutation logic executing");
 
                     collapseDiffs(fileDiffCollapseSettings);
@@ -58,23 +59,23 @@ import * as _ from 'lodash';
 
         function collapseDiffs(fileDiffCollapseSettings) {
             logDev('Collapsing Diffs');
-            
+
             $('div .file-header').each(function (index) {
                 let fileName = $(this).find('div.file-info').find('a').attr('title');
                 let diffSettingThatMatched = null;
 
                 let fileMatch = fileDiffCollapseSettings.some((fileDiffCollapseSetting, index, array) => {
                     let isMatchStringNullOrWhitespace = !fileDiffCollapseSetting.matchString || !fileDiffCollapseSetting.matchString.trim();
-                    
+
                     if (!isMatchStringNullOrWhitespace) {
                         if (fileDiffCollapseSetting.matchType == "Contains") {
                             diffSettingThatMatched = fileDiffCollapseSetting;
-                           
+
                             return fileName.indexOf(fileDiffCollapseSetting.matchString) >= 0
                         }
                         else if (fileDiffCollapseSetting.matchType == "Matches Regex") {
                             diffSettingThatMatched = fileDiffCollapseSetting;
-                           
+
                             let regex = new RegExp(fileDiffCollapseSetting.matchString);
                             return regex.test(fileName);
                         }
@@ -89,7 +90,7 @@ import * as _ from 'lodash';
                     if (isButtonInExpandedMode) {
                         let linesInDiff = $(this).find('span.diffstat').text();
 
-                        chrome.runtime.sendMessage({type: "diffCollapsed", payload: {diffSettingThatMatched: diffSettingThatMatched, linesInDiff: parseInt(linesInDiff)}});
+                        chrome.runtime.sendMessage({ type: "diffCollapsed", payload: { diffSettingThatMatched: diffSettingThatMatched, linesInDiff: parseInt(linesInDiff) } });
 
                         // Directly doing the css updates that the button click does works more reliably that mimicing
                         // a button click so do that
@@ -103,12 +104,14 @@ import * as _ from 'lodash';
         chrome.storage.sync.get(fileDiffCollapseSettingsStorageKey, (items) => {
             fileDiffCollapseSettings = items[fileDiffCollapseSettingsStorageKey];
 
+            insertWhitespaceDiffToggle();
+
             collapseDiffs(fileDiffCollapseSettings);
 
             logDev('Done collapsing diffs, exiting content script');
         });
     }
-    else{
+    else {
         logDev('File container not found, existing content script')
     }
 })();

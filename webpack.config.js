@@ -4,6 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ChromeExtensionReloader = require('webpack-chrome-extension-reloader');
 
 module.exports = {
+    devtool: 'source-map',
     watch: true,
     entry: {
         popup: './src/popup.js',
@@ -34,6 +35,6 @@ module.exports = {
             { from: 'src/popup.html' },
             { from: 'src/images/*.png', to: 'images', flatten: true }
         ]),
-        new ChromeExtensionReloader(),
+        //new ChromeExtensionReloader(),
     ]
 }
