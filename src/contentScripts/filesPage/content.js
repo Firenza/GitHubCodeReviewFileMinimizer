@@ -1,20 +1,11 @@
 import * as _ from 'lodash';
 import {insertWhitespaceDiffToggle} from './diffWhitespace'
+import {logDev} from '../../common/logDev'
 
 // Execute everything in the function so the variables don't have a lifetime outside 
 // the script invocation
 (function () {
     const fileDiffCollapseSettingsStorageKey = "fileDiffToCollapseSettings";
-
-    // Figure out whether or not the script is running in developer mode
-    // the 'update_url' manifest key is added when an extension is uploaded to the 
-    // chrome web store
-    let IS_DEV_MODE = !('update_url' in chrome.runtime.getManifest());
-    let logDev = (message) => {
-        if (IS_DEV_MODE) {
-            console.log(message);
-        }
-    }
 
     let fileDiffCollapseSettings = null;
 
@@ -42,7 +33,7 @@ import {insertWhitespaceDiffToggle} from './diffWhitespace'
                     // to watch for one mutation
                     observer.disconnect();
 
-                    logDev("Done executing mutation logi");
+                    logDev("Done executing mutation logic");
                 }
             });
         }
