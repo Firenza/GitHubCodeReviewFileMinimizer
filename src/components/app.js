@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Paper from 'material-ui/Paper';
 import uuidv4 from 'uuid/v4';
 import * as _ from 'lodash';
+import * as chromeMessageTypes from '../common/chromeMessageTypes';
 
 import FileDiffToCollapseRegexes from './fileDiffCollapseRegexes'
 import NavBar from './navBar'
@@ -23,7 +24,10 @@ export default class App extends Component {
 
     componentDidMount() {
   
-        chrome.runtime.sendMessage({type: "extensionUILoaded", payload: {}});
+        chrome.runtime.sendMessage({
+            type: chromeMessageTypes.EXTENSION_UI_LOADED, 
+            payload: {}
+        });
 
         chrome.storage.sync.get(fillDiffCollapseSettingsStorageKey, (items) => {
             let fileDiffCollapseSettings = items[fillDiffCollapseSettingsStorageKey];
@@ -46,7 +50,10 @@ export default class App extends Component {
 
     updateFileDiffCollapseSetting = (updatedSetting) => {
         
-        chrome.runtime.sendMessage({type: "diffConditionUpdated", payload: {updatedDiffCondition: updatedSetting}});
+        chrome.runtime.sendMessage({
+            type: chromeMessageTypes.DIFF_CONDITION_UPDATED, 
+            payload: {updatedDiffCondition: updatedSetting}
+        });
         
         let index = _.findIndex(this.state.fileDiffCollapseSettings, (setting) => {
             return setting.id === updatedSetting.id
@@ -61,7 +68,10 @@ export default class App extends Component {
 
         let diffToDelete = _.find(this.state.fileDiffCollapseSettings, (dif) => { return dif.id === id});
 
-        chrome.runtime.sendMessage({type: "diffConditionDeleted", payload: {diffToDelete: diffToDelete}});
+        chrome.runtime.sendMessage({
+            type: chromeMessageTypes.DIFF_CONDITION_DELETED, 
+            payload: {diffToDelete: diffToDelete}
+        });
 
         _.remove(this.state.fileDiffCollapseSettings, (setting) => {
             return setting.id === id;
@@ -76,7 +86,10 @@ export default class App extends Component {
 
     addNewFileDiffCollapseSetting = (matchType, matchString) => {
 
-        chrome.runtime.sendMessage({type: "diffConditionAdded", payload: {matchType: matchType, matchString: matchString}});
+        chrome.runtime.sendMessage({
+            type: chromeMessageTypes.DIFF_CONDITION_ADDED, 
+            payload: {matchType: matchType, matchString: matchString}
+        });
 
         let newFileDiffCollapseSetting = {
             // generated a new guid for the id
@@ -108,7 +121,10 @@ export default class App extends Component {
     navigateToGitHubRepo = () => {
         let repoUrl = "https://github.com/Firenza/GitHubPullRequestEnhancer";
 
-        chrome.runtime.sendMessage({type: "externalNavigationRequested", payload: {url: repoUrl}});
+        chrome.runtime.sendMessage({
+            type: chromeMessageTypes.EXTERNAL_NAVIGATION_REQUESTED, 
+            payload: {url: repoUrl}
+        });
     }
 
     render() {

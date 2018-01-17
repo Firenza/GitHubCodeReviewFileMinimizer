@@ -8,8 +8,8 @@ module.exports = {
     watch: true,
     entry: {
         popup: './src/popup.js',
-        background: './src/background.js',
-        content: './src/content.js',
+        background: './src/backgroundScripts/background.js',
+        filesPageContent: './src/contentScripts/filesPage/content.js',
     },
     module: {
         rules: [
