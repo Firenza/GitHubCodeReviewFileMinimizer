@@ -1,3 +1,5 @@
+import {logDev} from '../../common/logDev'
+
 let getNumberOfWhitespaceDiffs = () => {
     let whitespaceDiffLines = 0;
 
@@ -66,6 +68,15 @@ let getNumberOfWhitespaceDiffs = () => {
 
 let insertWhitespaceDiffToggle = () => {
 
+    var whiteSpaceToggle = document.getElementById("whiteSpaceToggle");
+
+    if (whiteSpaceToggle) {
+        logDev("Haltting insertion of whitespace toggle, element is already there");
+        // If the element was already added then don't add it again. This code will be executed again
+        // after the page is refreshed and the element removed.
+        return;
+    }
+
     let windowUrl = new URL(window.location.href);
     let whitespaceDiffsAreBeingShown = !windowUrl.searchParams.has('w');
 
@@ -86,7 +97,7 @@ let insertWhitespaceDiffToggle = () => {
     }
 
     let whiteSpaceToggleButton = `
-        <div class="diffbar-item">
+        <div id="whiteSpaceToggle" class="diffbar-item">
         <div class="BtnGroup">     
             <a class="btn btn-sm btn-outline BtnGroup-item tooltipped tooltipped-s" href="${windowUrl}" aria-label="${ariaLabel}">${buttonText}</a>
         </div>
