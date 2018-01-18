@@ -6,38 +6,26 @@ let getNumberOfWhitespaceDiffs = () => {
     let whitespaceDiffLines = 0;
 
     $('div.file').each((index, div) => {
+      
+        // Go through each diff marked as an addition
+        $(div).find('td.blob-code.blob-code-addition').each((i, td) => {
+            let codeSpan = $(td).children('span[class=blob-code-inner]')[0];
 
-        let diffMakeupText = $(div).find('span.diffstat').first().attr('aria-label')
-        let match = additionDeletionsRegex.exec(diffMakeupText);
-        let numAdditions = Number(match[1]);
-        let numDeletinos = Number(match[2]);
-        let numHunkHeaders = $(div).find('td.blob-code-hunk').length;
-        let numExpanders = $(div).find('a.diff-expander').length;
+            if (IsDiffOnlyWhitespaceUpdates(codeSpan)) {
+                whitespaceDiffLines++;
+            }
+        });
 
-        // Not sure if the expanders part of this is valid
-        let isFileDeletionOrCreation = (numAdditions === 0 || numDeletinos === 0) && numHunkHeaders === 1 && numExpanders === 0
+        // Go through each diff marked as a deletion
+        $(div).find('td.blob-code.blob-code-deletion').each((i, td) => {
+            let codeSpan = $(td).children('span[class=blob-code-inner]')[0];
 
-        if (!isFileDeletionOrCreation) {
-
-             // Go through each diff marked as an addition
-             $(div).find('td.blob-code.blob-code-addition').each((i, td) => {
-                let codeSpan = $(td).children('span[class=blob-code-inner]')[0];
-
-                if (IsDiffOnlyWhitespaceUpdates(codeSpan)) {
-                    whitespaceDiffLines++;
-                }
-            });
-
-            // Go through each diff marked as a deletion
-            $(div).find('td.blob-code.blob-code-deletion').each((i, td) => {
-                let codeSpan = $(td).children('span[class=blob-code-inner]')[0];
-
-                // Parse the actual content of the diff to see if there are only newline / whitespace changes
-                if (IsDiffOnlyWhitespaceUpdates(codeSpan)) {
-                    whitespaceDiffLines++;
-                }
-            });
-        }
+            // Parse the actual content of the diff to see if there are only newline / whitespace changes
+            if (IsDiffOnlyWhitespaceUpdates(codeSpan)) {
+                whitespaceDiffLines++;
+            }
+        });
+        
     });
 
     return whitespaceDiffLines;
