@@ -1,49 +1,47 @@
 import {logDev} from '../../common/logDev'
 
+const additionDeletionsRegex = /(\d+) additions? & (\d+) deletions?/;
+
 let getNumberOfWhitespaceDiffs = () => {
     let whitespaceDiffLines = 0;
 
-    // Go through each diff marked as an addition
-    $('td.blob-code.blob-code-addition').each((i, td) => {
-        let codeSpan = $(td).children('span[class=blob-code-inner]')[0];
+    $('div.file').each((index, div) => {
 
-        // Parse the actual content of the diff to see if there are only newline / whitespace changes
-        if (IsDiffEmptyLine(codeSpan)) {
-            whitespaceDiffLines++;
-            console.log('Addition empty line');
-        } else if (IsDiffOnlyWhitespaceUpdates(codeSpan)) {
-            whitespaceDiffLines++;
-            console.log('Addition internal whitespace');
-        }
-    });
+        let diffMakeupText = $(div).find('span.diffstat').first().attr('aria-label')
+        let match = additionDeletionsRegex.exec(diffMakeupText);
+        let numAdditions = Number(match[1]);
+        let numDeletinos = Number(match[2]);
+        let numHunkHeaders = $(div).find('td.blob-code-hunk').length;
+        let numExpanders = $(div).find('a.diff-expander').length;
 
-    // Go through each diff marked as a deletion
-    $('td.blob-code.blob-code-deletion').each((i, td) => {
-        let codeSpan = $(td).children('span[class=blob-code-inner]')[0];
+        // Not sure if the expanders part of this is valid
+        let isFileDeletionOrCreation = (numAdditions === 0 || numDeletinos === 0) && numHunkHeaders === 1 && numExpanders === 0
 
-        // Parse the actual content of the diff to see if there are only newline / whitespace changes
-        if (IsDiffEmptyLine(codeSpan)) {
-            whitespaceDiffLines++;
-            console.log('deletion empty line');
-        } else if (IsDiffOnlyWhitespaceUpdates(codeSpan)) {
-            whitespaceDiffLines++;
-            console.log('deletion internal whitespace');
+        if (!isFileDeletionOrCreation) {
+
+             // Go through each diff marked as an addition
+             $(div).find('td.blob-code.blob-code-addition').each((i, td) => {
+                let codeSpan = $(td).children('span[class=blob-code-inner]')[0];
+
+                if (IsDiffOnlyWhitespaceUpdates(codeSpan)) {
+                    whitespaceDiffLines++;
+                }
+            });
+
+            // Go through each diff marked as a deletion
+            $(div).find('td.blob-code.blob-code-deletion').each((i, td) => {
+                let codeSpan = $(td).children('span[class=blob-code-inner]')[0];
+
+                // Parse the actual content of the diff to see if there are only newline / whitespace changes
+                if (IsDiffOnlyWhitespaceUpdates(codeSpan)) {
+                    whitespaceDiffLines++;
+                }
+            });
         }
     });
 
     return whitespaceDiffLines;
-
-    function IsDiffEmptyLine(codeSpan) {
-        // Check to see if this is an empty line that was added or removed
-        let textInLineDiff = codeSpan.innerText.replace('+', '').replace('-', '').replace(/ /g, '');
-
-        if (textInLineDiff === "") {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
+   
     function IsDiffOnlyWhitespaceUpdates(codeSpan) {
         let partialDifs = $(codeSpan).children('span.x.x-first.x-last')
 
