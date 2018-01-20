@@ -35,6 +35,6 @@ module.exports = {
             { from: 'src/popup.html' },
             { from: 'src/images/*.png', to: 'images', flatten: true }
         ]),
-        //new ChromeExtensionReloader(),
+        new ChromeExtensionReloader(),
     ]
 }
