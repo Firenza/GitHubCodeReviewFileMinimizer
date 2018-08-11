@@ -25,3 +25,4 @@ File diffs to collapse can be selected by a simple string contains or a regex ma
 * [Material-UI React components](https://material-ui.com/)
 * Webpack
 * Google Analytics
+* Visual Studio Code
