@@ -2,7 +2,7 @@
 
 A Chrome extension meant to make managing GitHub pull requests easier via the following enhancements
 
-![](https://github.com/Firenza/GitHubPullRequestEnhancer/blob/master/documentationAssets/UIScreenshot.png)
+![](https://user-images.githubusercontent.com/9145108/43986650-d1950aec-9cd9-11e8-8c71-ce3c448223c6.jpg)
 
 #### Auto Collapsing File Diffs
 
