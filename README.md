@@ -15,7 +15,7 @@ File diffs to collapse can be selected by a simple string contains or a regex ma
 #### Usage
 
 1. [Click here](https://chrome.google.com/webstore/detail/github-pull-request-enhan/fbcijinnjokkhnmeilacncmiafcgplph) to install the extension from the Chrome Store
-2. Click the  ![](https://github.com/Firenza/GitHubPullRequestEnhancer/blob/master/src/images/PR_16x16.png) button in Chrome
+2. Click the  ![](https://user-images.githubusercontent.com/9145108/43986713-4c6ac184-9cdb-11e8-9a6e-183c73baa2ac.jpg) button in Chrome
 3. Enter some matching conditions
 4. Naivgate to a Pull Request enjoy having less to read :)
 
